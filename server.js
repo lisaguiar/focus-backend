@@ -6,6 +6,7 @@ import { createServer } from 'http'
 import mysql from 'mysql2'
 
 import authRoutes from './routes/auth.js'
+import desktopRoutes from './routes/desktop.js'
 
 dotenv.config({ path: './config/.env' })
 
@@ -29,6 +30,7 @@ export const db = mysql.createConnection({
 })
 
 app.use('/auth', authRoutes)
+app.use('/desktop', desktopRoutes)
 
 const PORT = process.env.PORT || 4000
 server.listen(PORT, () => {

@@ -1,8 +1,16 @@
 import express from 'express'
-import { getUsers } from '../controllers/auth.js'
+import { 
+    signin, 
+    signup, 
+    logout, 
+    session
+} from '../controllers/auth.js'
 
 const router = express.Router()
 
-router.get('/users', getUsers)
+router.post('/signup', signup)
+router.post('/signin', signin)
+router.post('/logout', logout)
+router.get('/session', session)
 
 export default router
