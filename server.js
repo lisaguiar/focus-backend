@@ -7,6 +7,8 @@ import mysql from 'mysql2'
 
 import authRoutes from './routes/auth.js'
 import desktopRoutes from './routes/desktop.js'
+import memberRoutes from './routes/member.js'
+import validateRoutes from './routes/validate.js'
 
 dotenv.config({ path: './config/.env' })
 
@@ -31,8 +33,11 @@ export const db = mysql.createConnection({
 
 app.use('/auth', authRoutes)
 app.use('/desktop', desktopRoutes)
+app.use('/member', memberRoutes)
+app.use('/validate', validateRoutes)
 
-const PORT = process.env.PORT || 4000
+
+const PORT = process.env.PORT || 8000
 server.listen(PORT, () => {
     console.log(`Conectado na porta ${PORT}.`)
 })

@@ -9,7 +9,7 @@ export const getDesktops = (req, res) => {
     const sql = "SELECT a.*, b.id, b.permission_id FROM desktop a JOIN user_desktop b WHERE b.user_id = ? AND a.id = b.desktop_id AND a.state = 'active' AND b.state = 'active'"
     const values = [ user_id ]
 
-    db.query(sql, values, (error, results) => {
+    db.query(query, values, (error, results) => {
         if (error) {
             return res.status(500).json({ error: "Houve um erro na conexão com o servidor." }) 
         }
@@ -33,7 +33,7 @@ export const getDesktops = (req, res) => {
 export const getDesktop = (req, res) => {
     const { desktop_id } = req.params
 
-    const sql = "SELECT a.*, b.id, b.permission_id, c.* FROM desktop a JOIN user_desktop b JOIN users c WHERE a.id = ? AND a.id = b.desktop_id AND c.id = b.user_id AND a.state = 'active' AND b.state = 'active'"
+    const sql = "SELECT a.* FROM desktop a JOIN user_desktop b JOIN users c WHERE a.desktop_id = ? AND a.desktop_id = b.desktop_id AND c.user_id = b.user_id AND a.state = 'active' AND b.state = 'active'"
     const values = [ desktop_id ]
 
     db.query(sql, values, (error, results) => {

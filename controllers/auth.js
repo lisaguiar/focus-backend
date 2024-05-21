@@ -7,9 +7,9 @@ const state = 'active'
 export const signup = (req, res) => {
     const { username, email, password } = req.body
     
-    const sql = "SELECT * FROM users WHERE email = ?"
+    const sql = `SELECT * FROM users WHERE email = "${email}"`
 
-    db.query(sql, [email], (error, results) => {
+    db.query(sql, (error, results) => {
         if (error) {
             return res.status(500).json({ error: "Houve um erro na conexão com o servidor." })
         }
@@ -20,16 +20,21 @@ export const signup = (req, res) => {
         var salt = bcrypt.genSaltSync(10)
         var hash = bcrypt.hashSync(password, salt)
 
-        const sql = "INSERT INTO users (`email`, `password`, `username`, `state`) VALUES (?)"
+        const date = new Date()
+
+        const sql = "INSERT INTO users (`email`, `password`, `username`, `state`, `createdAt`, `updatedAt`) VALUES (?)"
         const values = [
             email,
             hash,
             username,
-            state
+            state,
+            date,
+            date
         ]
 
         db.query(sql, [values], (error, results) => {
             if (error) {
+                console.log(error)
                 return res.status(500).json({ error: "Não foi possível realizar o cadastro." })
             }
             return res.status(200).json({ message: "Usuário cadastrado." })
@@ -55,13 +60,12 @@ export const signin = (req, res) => {
                 return res.status(400).json({ error: "Email ou senha incorretos." })
             } else {
                 const secretKey = process.env.SECRET_KEY
-                var token = jwt.sign({ id: results[0].id }, secretKey)
+                var token = jwt.sign({ user_id: results[0].user_id }, secretKey)
                 const { password, ...other } = results[0]
 
                 res.cookie("token", token, {
                     httpOnly: true
                 })
-                console.log("deu certo")
                 return res.status(200).json(other)
             }
         }
@@ -73,15 +77,4 @@ export const logout = (req, res) => {
         sameSite: "none",
         secure: true
     }).status(200).json({ message: "Usuário deslogado." })
-}
-
-export const session = (req, res) => {
-    const cookies = req.cookies['token']
-
-    if (!cookies) {
-        return res.status(200).json({ authorized: false })
-    } else {
-        return res.status(200).json({ authorized: true })
-    }
-
 }
