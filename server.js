@@ -9,6 +9,11 @@ import authRoutes from './routes/auth.js'
 import desktopRoutes from './routes/desktop.js'
 import memberRoutes from './routes/member.js'
 import validateRoutes from './routes/validate.js'
+import projectRoutes from './routes/project.js'
+import frameRoutes from './routes/frame.js'
+import checklistRoutes from './routes/checklist.js'
+import noteRoutes from './routes/note.js'
+import kanbanRoutes from './routes/kanban.js'
 
 dotenv.config({ path: './config/.env' })
 
@@ -35,7 +40,11 @@ app.use('/auth', authRoutes)
 app.use('/desktop', desktopRoutes)
 app.use('/member', memberRoutes)
 app.use('/validate', validateRoutes)
-
+app.use('/project', projectRoutes)
+app.use('/frame', frameRoutes)
+app.use('/checklist', checklistRoutes)
+app.use('/note', noteRoutes)
+app.use('/kanban', kanbanRoutes)
 
 const PORT = process.env.PORT || 8000
 server.listen(PORT, () => {

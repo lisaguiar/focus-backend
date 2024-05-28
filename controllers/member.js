@@ -15,7 +15,7 @@ export const getMembers = (req, res) => {
         if (results.length === 0 || !results.length) {
             return res.status(200).json({ message: "Nenhum membro encontrado." })
         } else {
-            return res.status(200).json(results.data)
+            return res.status(200).json(results)
         }
     })
 }
@@ -32,7 +32,7 @@ export const selectUser = (req, res) => {
         if (results.length === 0 || !results.length) {
             return res.status(200).json({ message: "Nenhum membro encontrado." })
         } else {
-            return res.status(200).json(results.data)
+            return res.status(200).json(results)
         }
     })
 }
@@ -49,7 +49,7 @@ export const postMember = (req, res) => {
         if (results.length === 0 || !results.length) {
             return res.status(200).json({ message: "Nenhum membro encontrado." })
         } else {
-            const user_id = results.data
+            const user_id = results
             const values = [
                 user_id,
                 desktop_id,

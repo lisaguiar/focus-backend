@@ -9,7 +9,7 @@ export const getDesktops = (req, res) => {
     const sql = "SELECT a.*, b.id, b.permission_id FROM desktop a JOIN user_desktop b WHERE b.user_id = ? AND a.id = b.desktop_id AND a.state = 'active' AND b.state = 'active'"
     const values = [ user_id ]
 
-    db.query(query, values, (error, results) => {
+    db.query(sql, values, (error, results) => {
         if (error) {
             return res.status(500).json({ error: "Houve um erro na conexão com o servidor." }) 
         }
@@ -40,7 +40,7 @@ export const getDesktop = (req, res) => {
         if (error) {
             return res.status(500).json({ error: "Houve um erro na conexão com o servidor." }) 
         }
-        return res.status(200).json(results)
+        return res.status(200).json(results[0])
     })
 }
 
@@ -48,17 +48,17 @@ export const postDesktop = (req, res) => {
     const { title, description } = req.body
     const { user_id } = req.params
 
-    const created = new Date()
+    const createdDate = new Date()
 
     const sql = "INSERT INTO desktop (title, description, state, created) VALUES (?)"
     const values = [
         title,
         description,
         state,
-        created
+        createdDate
     ]
 
-    db.query(sql, [values], (error) => {
+    db.query(sql, values, (error) => {
         if (error) {
             return res.status(500).json({ error: "Houve um erro na conexão com o servidor." })
         }
@@ -77,7 +77,7 @@ export const postDesktop = (req, res) => {
                     desktop_id,
                     '1',
                     state,
-                    created
+                    createdDate
                 ]
 
                 db.query(sql, [values], (error) => {
@@ -89,5 +89,45 @@ export const postDesktop = (req, res) => {
             } 
         })
     })
+}
 
+export const updateDesktop = (req, res) => {
+    const { desktop_id } = req.params
+    const { title, description } = req.body
+
+    const updatedDate = new Date()
+
+    const sql = "UPDATE desktop SET title = ?, description = ?, updatedAt = ? WHERE desktop_id = ?"
+    const values = [
+        title, 
+        description, 
+        updatedDate, 
+        desktop_id
+    ]
+
+    db.query(sql, values, (error) => {
+        if (error) {
+            return res.status(500).json({ error: "Houve um erro na conexão com o servidor." })
+        }
+        return res.status(200).json({ message: "Área de trabalho atualizada com sucesso." })
+    })
+}
+
+export const deleteDesktop = (req, res) => {
+    const { desktop_id } = req.params
+
+    const updatedDate = new Date()
+
+    const sql = "UPDATE desktop SET state = 'disabled', updatedAt = ? WHERE desktop_id = ?"
+    const values = [
+        updatedDate, 
+        desktop_id
+    ]
+
+    db.query(sql, values, (error) => {
+        if (error) {
+            return res.status(500).json({ error: "Houve um erro na conexão com o servidor." })
+        }
+        return res.status(200).json({ message: "Área de trabalho excluída com sucesso." })
+    });
 }

@@ -4,10 +4,6 @@ import jwt from 'jsonwebtoken'
 export const validateUrl = (req, res) => {
     const { user_id, desktop_id, project_id, frame_id } = req.body
 
-    if (!user_id) {
-        
-    }
-
     if (!frame_id || frame_id === null) {
         if (!project_id || frame_id === null) {
             if (!desktop_id || desktop_id === null) {
@@ -17,10 +13,9 @@ export const validateUrl = (req, res) => {
 
             db.query(sql, (error, results) => {
                 if (error) {
-                    console.log(error)
                     return res.status(500).json({ error: "Houve um erro na conexão com o servidor." }) 
-                } 
-                if (results.length) {
+                }
+                if (results.length > 0) {
                     return res.status(200).json({ authorized: true })
                 } else {
                     return res.status(200).json({ authorized: false })
@@ -39,7 +34,7 @@ export const validateUrl = (req, res) => {
                     return res.status(200).json({ authorized: false })
                 }
             })
-        }
+        } 
     }
 }
 
